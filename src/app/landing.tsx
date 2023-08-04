@@ -60,9 +60,9 @@ export default function Landing() {
     }
   };
 
-  const handleCreateShortUrl = async () => {
+  const handleCreateShortUrl = async (e: any) => {
+    e.preventDefault();
     const shortened = await createShortUrl(url);
-
     setShortenedUrl(shortened);
     setShowForm(false);
   };
@@ -71,23 +71,8 @@ export default function Landing() {
     setUrl(event.target.value);
   };
 
-  const handleLinkClick = async () => {
-    const id = shortenedUrl.slice(shortenedUrl.length - baseUrl.length);
-    const response = await fetch(`http://localhost:10091/rest/url/${id}`);
-    if (response.ok) {
-      const data = await response.json();
-      setOrigUrl(data.url);
-      if (data && data.url) {
-        window.open(data.url, "_blank");
-      } else {
-        setError("An error occurred while retrieving the original URL.");
-      }
-    } else {
-      setError("An error occurred while retrieving the original URL.");
-    }
-  };
-
-  const toggleForm = () => {
+  const toggleForm = (e: any) => {
+    e.preventDefault();
     setShowForm(true);
   };
 
@@ -125,7 +110,7 @@ export default function Landing() {
                 onChange={handleUrlChange}
               />
               <button
-                type="button"
+                type="submit"
                 className={
                   "py-3 px-4 bg-palette-primary hover:bg-palette-dark text-white text-sm sm:text-base font-semibold rounded-r-lg border border-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-palette-primary"
                 }
@@ -156,7 +141,7 @@ export default function Landing() {
                 />
               )}
               <button
-                type="button"
+                type="submit"
                 className={
                   "py-3 px-4 bg-palette-primary hover:bg-palette-dark text-white text-sm sm:text-base font-semibold rounded-r-lg border border-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-palette-primary"
                 }
