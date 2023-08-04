@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react";
 
-export default function Form2() {
+export default function Landing() {
   // const baseUrl = "https://minilinks.com/";
   const baseUrl = "http://localhost:10091/rest/url/"; // todo:set this in application.properties?
   const [url, setUrl] = useState<string>("");
@@ -10,6 +10,7 @@ export default function Form2() {
   const [shortenedUrl, setShortenedUrl] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [randomColor, setRandomColor] = useState("");
+  const [showForm, setShowForm] = useState(true);
 
   const gradientColors = [
     "to-green-300",
@@ -61,8 +62,9 @@ export default function Form2() {
 
   const handleCreateShortUrl = async () => {
     const shortened = await createShortUrl(url);
+
     setShortenedUrl(shortened);
-    console.log(shortenedUrl);
+    setShowForm(false);
   };
 
   const handleUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -75,15 +77,18 @@ export default function Form2() {
     if (response.ok) {
       const data = await response.json();
       setOrigUrl(data.url);
-      console.log("printing:" + data.url);
       if (data && data.url) {
         window.open(data.url, "_blank");
       } else {
-        setError("An error occurred while retrieving the original URL1.");
+        setError("An error occurred while retrieving the original URL.");
       }
     } else {
-      setError("An error occurred while retrieving the original URL2.");
+      setError("An error occurred while retrieving the original URL.");
     }
+  };
+
+  const toggleForm = () => {
+    setShowForm(true);
   };
 
   return (
@@ -103,32 +108,64 @@ export default function Form2() {
             <span className="text-palette-primary">MiniLinks.</span>
           </h1>
           <p className="font-secondary text-palette-light text-base md:text-lg lg:text-xl">
-            {shortenedUrl != "" ? (
-              <Link href="">baseUrl + shortenedUrl</Link>
-            ) : (
-              "Start using MiniLinks today."
-            )}
+            {shortenedUrl != ""
+              ? // <Link href="">{baseUrl + shortenedUrl}</Link>
+                "Start using MiniLinks today."
+              : "Start using MiniLinks today."}
           </p>
-          <form className="font-secondary flex flex-shrink w-full px-2 max-w-lg mx-auto justify-center">
-            <input
-              className="border border-r-0 border-palette-light rounded-l-lg w-2/3
-              focus:outline-none focus:ring-1 focus:ring-palette-primary px-4"
-              type="text"
-              required
-              placeholder="Your URL here"
-              value={url}
-              onChange={handleUrlChange}
-            />
-            <button
-              type="button"
-              className={
-                "py-3 px-4 bg-palette-primary hover:bg-palette-dark text-white text-sm sm:text-base font-semibold rounded-r-lg border border-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-palette-primary"
-              }
-              onClick={handleCreateShortUrl}
-            >
-              Shorten URL
-            </button>
-          </form>
+          {showForm ? (
+            <form className="font-secondary flex flex-shrink w-full px-2 max-w-lg mx-auto justify-center">
+              <input
+                className="border border-r-0 border-palette-light rounded-l-lg w-2/3
+            focus:outline-none focus:ring-1 focus:ring-palette-primary px-4"
+                type="text"
+                required
+                placeholder="Your URL here"
+                value={url}
+                onChange={handleUrlChange}
+              />
+              <button
+                type="button"
+                className={
+                  "py-3 px-4 bg-palette-primary hover:bg-palette-dark text-white text-sm sm:text-base font-semibold rounded-r-lg border border-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-palette-primary"
+                }
+                onClick={handleCreateShortUrl}
+              >
+                Shorten URL
+              </button>
+            </form>
+          ) : (
+            <form className="font-secondary flex flex-shrink w-full px-2 max-w-lg mx-auto justify-center">
+              {error == "" ? (
+                <input
+                  className="border border-r-0 border-palette-light rounded-l-lg w-2/3
+            focus:outline-none focus:ring-1 focus:ring-palette-primary px-4"
+                  type="text"
+                  disabled
+                  value={baseUrl + shortenedUrl}
+                  onChange={handleUrlChange}
+                />
+              ) : (
+                <input
+                  className="border border-r-2 border-red-500 rounded-l-lg w-2/3
+           px-4"
+                  type="text"
+                  disabled
+                  value={error}
+                  onChange={handleUrlChange}
+                />
+              )}
+              <button
+                type="button"
+                className={
+                  "py-3 px-4 bg-palette-primary hover:bg-palette-dark text-white text-sm sm:text-base font-semibold rounded-r-lg border border-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-palette-primary"
+                }
+                onClick={toggleForm}
+              >
+                Go Back
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>
