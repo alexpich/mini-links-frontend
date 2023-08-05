@@ -78,14 +78,16 @@ export default function Landing() {
 
   return (
     <div
-      className={`bg-gradient-to-tr from-palette-primary ${randomColor} relative h-screen w-screen`}
+      // className={`bg-gradient-to-tr from-palette-primary ${randomColor} relative h-screen w-screen`}
+      className={`bg-gradient-to-tr from-palette-primary to-purple-400 relative h-screen w-screen`}
     >
-      {/* <img
+      <img
         className="absolute inset-0 w-full h-full object-cover mix-blend-multiply filter brightness-50"
         alt="main background image"
         src="https://source.unsplash.com/random"
-      /> */}
-      <div className="absolute filter inset-0 bg-gray-800 opacity-50"></div>
+      />
+      {/* <div className="absolute filter inset-0 "></div> */}
+      {/* <div className="absolute filter inset-0 bg-gray-800 opacity-50"></div> */}
       <div className="absolute inset-0 flex flex-col justify-center items-center w-5/6 max-w-lg mx-auto text-center">
         <div className="space-y-8">
           <h1 className="font-primary font-extrabold text-white text-3xl sm:text-4xl md:text-5xl md:leading-tight">
